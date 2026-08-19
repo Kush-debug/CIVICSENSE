@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Grievance Portal — SCISM | Government of India</title>
+    <link rel="stylesheet" href="../auth/auth.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+    <!-- 1. National Tricolor Strip -->
+    <div class="gov-tricolor-strip"></div>
+
+    <!-- 2. Gov Utility Bar -->
+    <header class="gov-utility-bar">
+        <div class="gov-utility-inner">
+            <div class="gov-utility-left">
+                <span class="gov-national-text">
+                    🇮🇳 <span data-i18n="gov_title">Government of India</span>
+                </span>
+                <span class="gov-ministry-text" data-i18n="ministry_title">
+                    Ministry of Housing and Urban Affairs
+                </span>
+            </div>
+            <div class="gov-utility-right">
+                <span class="gov-clock" id="liveGovClock">19 Aug 2026 | 00:00:00 IST</span>
+                <div class="gov-accessibility-controls">
+                    <button type="button" class="gov-util-btn" id="fontDecreaseBtn" title="Decrease Font Size">A-</button>
+                    <button type="button" class="gov-util-btn" id="fontResetBtn" title="Default Font Size">A</button>
+                    <button type="button" class="gov-util-btn" id="fontIncreaseBtn" title="Increase Font Size">A+</button>
+                    <button type="button" class="gov-util-btn" id="contrastToggleBtn" title="Toggle High Contrast Mode">◐ Contrast</button>
+                </div>
+                <button type="button" class="gov-lang-btn" id="langToggleBtn">हिन्दी (Hindi)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. Citizen Navbar -->
+    <nav class="gov-navbar">
+        <div class="gov-navbar-inner">
+            <a href="#dashboard" class="gov-brand">
+                <!-- State Emblem of India SVG -->
+                <svg class="gov-emblem-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 C35 5 25 15 25 28 C25 40 32 48 40 52 L35 85 L65 85 L60 52 C68 48 75 40 75 28 C75 15 65 5 50 5 Z" fill="#0A2540"/>
+                    <circle cx="50" cy="28" r="8" fill="#FF9933"/>
+                    <path d="M20 90 L80 90 L75 100 L25 100 Z" fill="#0A2540"/>
+                    <circle cx="50" cy="95" r="4" fill="#138808"/>
+                    <text x="50" y="114" font-family="'Noto Sans Devanagari', sans-serif" font-size="9" font-weight="bold" fill="#0A2540" text-anchor="middle">सत्यमेव जयते</text>
+                </svg>
+                <div class="gov-brand-text">
+                    <h1>Civic<span>Connect</span></h1>
+                    <p data-i18n="citizen_portal">Citizen Grievance Redressal Portal</p>
+                </div>
+            </a>
+
+            <div class="gov-nav-links">
+                <a href="#dashboard" class="active" data-i18n="dashboard">Dashboard</a>
+                <a href="#gisMapSection">GIS City Map</a>
+                <a href="#complaints" data-i18n="my_complaints">My Grievances</a>
+                <a href="#profile" data-i18n="profile">Profile</a>
+                <div class="gov-citizen-badge">
+                    <span>✓</span> <span id="userBadge">Citizen</span>
+                </div>
+                <button type="button" class="gov-logout-btn" id="logoutBtn" data-i18n="logout">Sign Out</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 4. Hero Section & Quick Grievance Action -->
+    <section class="gov-hero-section" id="dashboard">
+        <div class="gov-hero-inner">
+            <div class="gov-hero-content">
+                <span class="gov-hero-tag">
+                    🏛️ National Urban Citizen Charter
+                </span>
+                <h2>Report Civic Problems. <span>Track Official Action.</span></h2>
+                <p>
+                    Lodge issues regarding potholes, street lighting, waste clearance, water supply, or drainage. Every grievance is assigned a unique token and backed by a strict Citizen Service Level Agreement (SLA).
+                </p>
+            </div>
+
+            <div class="gov-hero-actions">
+                <button type="button" class="gov-lodge-btn" id="openComplaintModalBtn">
+                    <span>⊕</span> <span data-i18n="new_complaint">Lodge Grievance</span>
+                </button>
+                <div class="gov-quick-track-wrap">
+                    <input type="text" id="quickTrackInput" placeholder="Enter Token ID (e.g. GOV-UP-2026-1001)">
+                    <button type="button" id="quickTrackBtn">Track</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Metric Stat Cards -->
+    <section class="gov-stats-container">
+        <div class="gov-stat-card">
+            <div class="gov-stat-icon-wrap gov-stat-icon-blue">📄</div>
+            <div class="gov-stat-details">
+                <p data-i18n="total_grievances">Total Grievances</p>
+                <h3 id="statTotal">0</h3>
+            </div>
+        </div>
+
+        <div class="gov-stat-card pending-card">
+            <div class="gov-stat-icon-wrap gov-stat-icon-yellow">⏳</div>
+            <div class="gov-stat-details">
+                <p data-i18n="pending">Pending Review</p>
+                <h3 id="statPending">0</h3>
+            </div>
+        </div>
+
+        <div class="gov-stat-card progress-card">
+            <div class="gov-stat-icon-wrap gov-stat-icon-indigo">⚙️</div>
+            <div class="gov-stat-details">
+                <p data-i18n="in_progress">In Progress</p>
+                <h3 id="statProgress">0</h3>
+            </div>
+        </div>
+
+        <div class="gov-stat-card resolved-card">
+            <div class="gov-stat-icon-wrap gov-stat-icon-green">✅</div>
+            <div class="gov-stat-details">
+                <p data-i18n="resolved">Resolved & Closed</p>
+                <h3 id="statResolved">0</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5.1 Interactive GIS Civic Map Section -->
+    <section class="gov-section-card" id="gisMapSection" style="max-width: 1240px; margin: 0 auto 28px auto; padding: 22px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 12px;">
+            <div>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--gov-navy-900); display: flex; align-items: center; gap: 8px;">
+                    🗺️ City-Wide GIS Civic Map & Hotspots
+                    <span style="font-size: 0.75rem; background: var(--gov-saffron-500); color: white; padding: 2px 8px; border-radius: 12px; font-weight: 700;">LIVE REDRESSAL</span>
+                </h2>
+                <p style="font-size: 0.84rem; color: var(--gov-text-muted); margin-top: 2px;">
+                    Interactive map showing verified citizen grievances, active roadworks, and ward resolution statuses.
+                </p>
+            </div>
+
+            <!-- Map Filter Pills -->
+            <div class="gov-map-filter-bar">
+                <button type="button" class="gov-map-pill active" data-map-filter="all">All Wards (<span id="mapCountAll">0</span>)</button>
+                <button type="button" class="gov-map-pill" data-map-filter="open">Active Open Issues (<span id="mapCountOpen">0</span>)</button>
+                <button type="button" class="gov-map-pill" data-map-filter="potholes">🕳️ Potholes</button>
+                <button type="button" class="gov-map-pill" data-map-filter="sanitation">🗑️ Waste</button>
+                <button type="button" class="gov-map-pill" data-map-filter="resolved">✅ Resolved</button>
+                <button type="button" class="gov-map-pill" id="centerMapKanpurBtn" title="Reset View">🎯 Kanpur Nagar</button>
+            </div>
+        </div>
+
+        <div id="citizenGisMap" style="height: 380px; width: 100%; border-radius: 10px; border: 1px solid var(--gov-border); position: relative; z-index: 10;"></div>
+
+        <!-- Map Legend Bar -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 0.78rem; color: #475569; background: #f8fafc; padding: 8px 14px; border-radius: 6px;">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                <span><strong>Legend:</strong></span>
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Pending Review</span>
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; display: inline-block;"></span> In Progress / Action</span>
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Resolved & Validated</span>
+            </div>
+            <div style="font-weight: 600; color: var(--gov-navy-800);">
+                📡 High Precision GIS Layer (OpenStreetMap / SCISM Geotags)
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Main Content Area (Grievance List + Sidebar) -->
+    <main class="gov-main-content">
+
+        <!-- Left Primary Column -->
+        <div class="gov-content-primary">
+
+            <!-- Grievance List Container -->
+            <section class="gov-section-card" id="complaints">
+                <div class="gov-section-header">
+                    <div class="gov-section-title-wrap">
+                        <h2 data-i18n="my_complaints">My Reported Grievances</h2>
+                        <p>Track real-time status updates, field engineer notes, and official resolution proofs.</p>
+                    </div>
+
+                    <div class="gov-search-bar">
+                        <input
+                            type="text"
+                            class="gov-search-input"
+                            id="searchComplaintInput"
+                            placeholder="Search by Token, Category or Ward..."
+                            data-i18n="search_placeholder"
+                        >
+                    </div>
+                </div>
+
+                <!-- Complaint Cards Container -->
+                <div id="complaintList">
+                    <!-- Dynamic rendering via script.js -->
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Right Sidebar (Profile, Announcements, Helplines) -->
+        <aside class="gov-sidebar" id="profile">
+
+            <!-- Verified Citizen Identity Profile -->
+            <div class="gov-section-card gov-profile-box">
+                <div class="gov-avatar-badge" id="profileAvatar">G</div>
+                <h3 id="profileName">Citizen User</h3>
+                <p id="profileEmail">citizen@demo.com</p>
+
+                <div class="gov-profile-meta-list">
+                    <div class="gov-profile-row">
+                        <span>Mobile No:</span>
+                        <strong id="profilePhone">+91 98765 43210</strong>
+                    </div>
+                    <div class="gov-profile-row">
+                        <span>Assigned Ward:</span>
+                        <strong id="profileWard">Ward 42 - Kalyanpur</strong>
+                    </div>
+                    <div class="gov-profile-row">
+                        <span>City / State:</span>
+                        <strong id="profileCityState">Kanpur, UP</strong>
+                    </div>
+                    <div class="gov-profile-row">
+                        <span>Aadhaar Status:</span>
+                        <strong style="color: var(--gov-green-700);">✓ Verified (****-8842)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Municipal Public Advisories -->
+            <div class="gov-section-card">
+                <div class="gov-section-title-wrap" style="margin-bottom: 14px;">
+                    <h3 style="font-size: 1rem; font-weight: 800; color: var(--gov-navy-900);">
+                        📢 Municipal Public Advisories
+                    </h3>
+                    <p style="font-size: 0.75rem; color: var(--gov-text-muted);">Official announcements from Nagar Nigam</p>
+                </div>
+
+                <div id="advisoriesList">
+                    <div class="gov-advisory-item">
+                        <div class="gov-advisory-title">Special Mega Swachhata Drive This Saturday</div>
+                        <div class="gov-advisory-desc">Ward-level intensive drain desilting and waste segregation campaign starting 7:00 AM.</div>
+                    </div>
+                    <div class="gov-advisory-item urgent-advisory">
+                        <div class="gov-advisory-title">⚡ 24x7 Monsoon Helpline 1913 Active</div>
+                        <div class="gov-advisory-desc">Dial 1913 for rapid response regarding waterlogging, tree fall, or wire sparks.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Helplines Widget -->
+            <div class="gov-section-card" style="background: #f8fafc;">
+                <h4 style="font-size: 0.92rem; font-weight: 800; color: var(--gov-navy-900); margin-bottom: 10px;">
+                    📞 Emergency Civic Contacts
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px;">
+                        <span>Nagar Nigam 24x7:</span>
+                        <strong style="color: var(--gov-saffron-600);">1913</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px;">
+                        <span>National Emergency:</span>
+                        <strong style="color: #dc2626;">112</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px;">
+                        <span>CM Citizen Helpline:</span>
+                        <strong style="color: var(--gov-navy-800);">1076</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Power DISCOM:</span>
+                        <strong style="color: var(--gov-navy-800);">1912</strong>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+    </main>
+
+    <!-- =====================================================
+       7. LODGE COMPLAINT MODAL (GOV FORM WITH AI & GIS)
+    ===================================================== -->
+    <div id="complaintModal" class="gov-modal">
+        <div class="gov-modal-dialog" style="max-width: 650px;">
+            <div class="gov-modal-header">
+                <h3>🇮🇳 Lodge New Civic Grievance (नागरिक शिकायत दर्ज करें)</h3>
+                <button type="button" class="gov-modal-close" id="closeComplaintModalBtn">&times;</button>
+            </div>
+            <div class="gov-modal-body">
+                <form id="complaintForm">
+
+                    <!-- AI Smart Auto-Triage Live Recommendation Box -->
+                    <div id="aiTriageBanner" class="gov-ai-triage-card" style="display: none;">
+                        <div class="gov-ai-header">
+                            <span class="gov-ai-badge">🤖 SCISM AI Auto-Triage</span>
+                            <span class="gov-ai-confidence" id="aiConfidenceTag">96% Match</span>
+                        </div>
+                        <div class="gov-ai-body">
+                            <div class="gov-ai-suggestion-row">
+                                <span>Suggested Category:</span> <strong id="aiSuggestedCategory">Roads & Potholes</strong>
+                            </div>
+                            <div class="gov-ai-suggestion-row">
+                                <span>Target Department:</span> <strong id="aiSuggestedDept">PWD</strong>
+                            </div>
+                            <div class="gov-ai-suggestion-row">
+                                <span>Priority & SLA:</span> <strong id="aiSuggestedPriority">Medium (72h SLA)</strong>
+                            </div>
+                        </div>
+                        <button type="button" class="gov-ai-apply-btn" id="applyAiTriageBtn">
+                            ⚡ Apply AI Suggestions to Form
+                        </button>
+                    </div>
+
+                    <!-- Duplicate Grievance Warning Card -->
+                    <div id="duplicateWarningCard" class="gov-duplicate-card" style="display: none;">
+                        <div class="gov-duplicate-header">
+                            <span>⚠️ Similar Grievance Already Reported Nearby!</span>
+                        </div>
+                        <p class="gov-duplicate-text" id="duplicateNoticeText">
+                            An identical civic issue is currently under active municipal review in this ward.
+                        </p>
+                        <div id="duplicateListContainer"></div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label for="complaintTitle">Grievance Subject / Title (शिकायत का विषय) *</label>
+                            <button type="button" class="gov-mic-btn" id="voiceTitleBtn" title="Voice Input in Hindi/English">🎙️ Voice Type</button>
+                        </div>
+                        <div class="gov-input-wrap">
+                            <input type="text" id="complaintTitle" placeholder="e.g. Dangerous deep crater pothole near railway crossing" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="complaintCategory">Civic Category (श्रेणी) *</label>
+                        <div class="gov-input-wrap">
+                            <select id="complaintCategory" required>
+                                <option value="">Select Civic Category</option>
+                                <option value="Roads & Potholes">Roads & Potholes (लोक निर्माण / सड़क एवं गड्ढे)</option>
+                                <option value="Sanitation & Solid Waste">Sanitation & Solid Waste (नगर निगम स्वच्छता एवं कचरा)</option>
+                                <option value="Street Lighting">Street Lighting (मार्ग प्रकाश / स्ट्रीट लाइट)</option>
+                                <option value="Water Supply & Quality">Water Supply & Quality (जल संस्थान जलापूर्ति)</option>
+                                <option value="Drainage & Sewerage">Drainage & Sewerage (नाली एवं सीवर निकासी)</option>
+                                <option value="Public Health & Vector Control">Public Health & Vector Control (डेंगू/मलेरिया नियंत्रण)</option>
+                                <option value="Encroachment & Others">Encroachment & General Administration (अतिक्रमण एवं अन्य)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="complaintWard">Municipal Ward (नगर निगम वार्ड) *</label>
+                        <div class="gov-input-wrap">
+                            <select id="complaintWard" required>
+                                <option value="Ward 42 - Kalyanpur">Ward 42 - Kalyanpur (कल्याणपुर)</option>
+                                <option value="Ward 12 - Civil Lines">Ward 12 - Civil Lines (सिविल लाइन्स)</option>
+                                <option value="Ward 25 - Kakadeo">Ward 25 - Kakadeo (काकादेव)</option>
+                                <option value="Ward 34 - Swaroop Nagar">Ward 34 - Swaroop Nagar (स्वरूप नगर)</option>
+                                <option value="Ward 08 - Hazratganj">Ward 08 - Hazratganj (हजरतगंज)</option>
+                                <option value="Ward 15 - Gomti Nagar">Ward 15 - Gomti Nagar (गोमती नगर)</option>
+                                <option value="Ward 20 - Aliganj">Ward 20 - Aliganj (अलीगंज)</option>
+                                <option value="Ward 50 - Barra">Ward 50 - Barra (बर्रा)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Pinpoint Map & GPS Locator -->
+                    <div class="gov-form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label>Geographic Pinpoint & GPS (सटीक भू-स्थान) *</label>
+                            <button type="button" class="gov-gps-btn" id="detectGpsBtn">
+                                📍 Auto-Detect My GPS Location
+                            </button>
+                        </div>
+                        <div id="modalMapPicker" style="height: 180px; width: 100%; border-radius: 8px; border: 1px solid var(--gov-border); margin-bottom: 6px;"></div>
+                        <input type="hidden" id="complaintGeoCoords" value="26.4499° N, 80.3319° E">
+                        <div style="font-size: 0.74rem; color: #475569; display: flex; justify-content: space-between;">
+                            <span>📌 Click on map to adjust pin position</span>
+                            <span id="geoCoordsDisplay" style="font-weight: 700; color: var(--gov-navy-800);">26.4499° N, 80.3319° E</span>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="complaintLandmark">Exact Landmark & Street Location (सटीक स्थान एवं लैंडमार्क) *</label>
+                        <div class="gov-input-wrap">
+                            <input type="text" id="complaintLandmark" placeholder="e.g. Near Panki Power House Crossing, Lane 3" required>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="complaintPriority">Priority / Urgency Level (प्राथमिकता) *</label>
+                        <div class="gov-input-wrap">
+                            <select id="complaintPriority" required>
+                                <option value="Low">Low Priority (Standard 72h SLA)</option>
+                                <option value="Medium" selected>Medium Priority (Standard 48h SLA)</option>
+                                <option value="High">High Urgency (24h SLA)</option>
+                                <option value="Emergency">Emergency Hazard (12h SLA)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="complaintPhoto">Upload Photographic Evidence (फोटो साक्ष्य)</label>
+                        <div class="gov-input-wrap">
+                            <input type="file" id="complaintPhoto" accept="image/*">
+                        </div>
+                        <div id="photoPreviewBox" style="margin-top: 8px; display: none;">
+                            <img id="photoPreviewImg" src="" alt="Preview" style="max-height: 120px; border-radius: 6px; border: 1px solid var(--gov-border);">
+                            <div style="font-size: 0.72rem; color: #166534; margin-top: 4px;" id="geotagStamp">
+                                📍 Geotag Captured: Lat: 26.4952° N, Long: 80.2829° E (Kanpur Nagar)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label for="complaintDescription">Detailed Problem Description (विस्तृत विवरण) *</label>
+                            <button type="button" class="gov-mic-btn" id="voiceDescBtn" title="Voice Input in Hindi/English">🎙️ Voice Type</button>
+                        </div>
+                        <div class="gov-input-wrap">
+                            <textarea id="complaintDescription" rows="3" placeholder="Explain the civic issue clearly to help municipal field engineers inspect and resolve the problem..." required></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="gov-btn-primary" id="submitComplaintBtn">
+                        Submit Grievance to Municipal Authority ➔
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+       8. OFFICIAL ACKNOWLEDGMENT SLIP MODAL
+    ===================================================== -->
+    <div id="acknowledgmentModal" class="gov-modal">
+        <div class="gov-modal-dialog gov-slip-modal">
+            <div class="gov-modal-header">
+                <h3>🇮🇳 Grievance Acknowledgment Slip (शिकायत पावती)</h3>
+                <button type="button" class="gov-modal-close" id="closeAckModalBtn">&times;</button>
+            </div>
+            <div class="gov-modal-body">
+                <div class="gov-slip-content" id="printableSlipArea">
+                    <div class="gov-slip-watermark">GOVERNMENT OF INDIA</div>
+
+                    <div class="gov-slip-header">
+                        <div style="font-size: 0.78rem; font-weight: 700; color: var(--gov-navy-800);">
+                            GOVERNMENT OF INDIA · MINISTRY OF HOUSING AND URBAN AFFAIRS
+                        </div>
+                        <div class="gov-slip-title">
+                            SMART CIVIC ISSUE MANAGEMENT SYSTEM (SCISM)
+                        </div>
+                        <div class="gov-slip-subtitle">
+                            Official Grievance Registration & Citizen Redressal Acknowledgment
+                        </div>
+                    </div>
+
+                    <div class="gov-slip-grid">
+                        <div class="gov-slip-field">
+                            <span>Grievance Token ID:</span>
+                            <strong id="slipTokenId">GOV-UP-2026-1001</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Registration Date & Time:</span>
+                            <strong id="slipDate">18 Aug 2026, 10:30 AM</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Complainant Citizen Name:</span>
+                            <strong id="slipCitizenName">Gaurav Yadav</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Contact Mobile:</span>
+                            <strong id="slipCitizenPhone">+91 98765 43210</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Municipal Ward / Location:</span>
+                            <strong id="slipWard">Ward 42 - Kalyanpur</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Exact Landmark:</span>
+                            <strong id="slipLandmark">Near Panki Power House Crossing</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Grievance Category:</span>
+                            <strong id="slipCategory">Roads & Potholes</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Assigned Department:</span>
+                            <strong id="slipDept">Public Works Department (PWD)</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>SLA Resolution Window:</span>
+                            <strong id="slipSla">48 Hours Target</strong>
+                        </div>
+                        <div class="gov-slip-field">
+                            <span>Current Status:</span>
+                            <strong id="slipStatus">Under Review</strong>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid #cbd5e1; padding: 10px 0; font-size: 0.8rem;">
+                        <span style="color: var(--gov-text-muted); display: block; font-size: 0.75rem;">Subject Summary:</span>
+                        <strong id="slipTitle">Dangerous deep crater pothole near railway crossing</strong>
+                    </div>
+
+                    <div class="gov-slip-footer">
+                        <div class="gov-slip-barcode" id="slipBarcode">
+                            *GOV-UP-2026-1001*
+                        </div>
+                        <div style="text-align: right; font-size: 0.75rem; color: #475569;">
+                            <div>Electronically Verified by SCISM Server</div>
+                            <div style="font-weight: 700; color: var(--gov-green-700);">✓ Satyameva Jayate Validated</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;" class="no-print">
+                    <button type="button" class="gov-btn-action" id="printSlipBtn">
+                        🖨️ Print Slip / Save PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+       9. CITIZEN 5-STAR RATING & FEEDBACK MODAL
+    ===================================================== -->
+    <div id="feedbackModal" class="gov-modal">
+        <div class="gov-modal-dialog" style="max-width: 480px;">
+            <div class="gov-modal-header">
+                <h3>⭐ Rate Resolution Service (सेवा का मूल्यांकन)</h3>
+                <button type="button" class="gov-modal-close" id="closeFeedbackModalBtn">&times;</button>
+            </div>
+            <div class="gov-modal-body">
+                <form id="feedbackForm">
+                    <input type="hidden" id="feedbackComplaintId">
+                    <p style="font-size: 0.88rem; color: var(--gov-text-muted); text-align: center;">
+                        How satisfied are you with the municipal resolution of your grievance?
+                    </p>
+
+                    <div class="gov-rating-stars" id="starContainer">
+                        <span class="gov-star" data-score="1">★</span>
+                        <span class="gov-star" data-score="2">★</span>
+                        <span class="gov-star" data-score="3">★</span>
+                        <span class="gov-star" data-score="4">★</span>
+                        <span class="gov-star" data-score="5">★</span>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="feedbackText">Citizen Comments / Review (नागरिक टिप्पणी)</label>
+                        <div class="gov-input-wrap">
+                            <textarea id="feedbackText" rows="3" placeholder="Share your experience regarding the promptness and quality of work done..."></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="gov-btn-primary" id="submitFeedbackBtn">
+                        Submit Official Rating ➔
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. Official National Footer -->
+    <footer class="gov-footer">
+        <div class="gov-footer-inner">
+            <div class="gov-footer-brand">
+                <h4>🏛️ Smart Civic Issue Management System (SCISM)</h4>
+                <p>
+                    Portal designed, developed, and maintained in compliance with the Guidelines for Indian Government Websites (GIGW). Ministry of Housing and Urban Affairs, Government of India.
+                </p>
+                <p style="font-size: 0.75rem; color: #64748b;">
+                    National Portal of India | Digital India Initiative | CPGRAMS Integrated
+                </p>
+            </div>
+            <div class="gov-footer-links">
+                <h5>Important Links</h5>
+                <ul>
+                    <li><a href="https://mohua.gov.in" target="_blank" rel="noopener">Ministry of Housing & Urban Affairs</a></li>
+                    <li><a href="https://digitalindia.gov.in" target="_blank" rel="noopener">Digital India Portal</a></li>
+                    <li><a href="https://swachhbharatmission.ddws.gov.in" target="_blank" rel="noopener">Swachh Bharat Mission</a></li>
+                    <li><a href="https://pgportal.gov.in" target="_blank" rel="noopener">CPGRAMS Central Grievance</a></li>
+                </ul>
+            </div>
+            <div class="gov-footer-links">
+                <h5>Emergency Helplines</h5>
+                <ul>
+                    <li><a href="tel:1913">📞 1913 - Nagar Nigam 24x7</a></li>
+                    <li><a href="tel:112">🚨 112 - National Emergency</a></li>
+                    <li><a href="tel:1076">🏛️ 1076 - CM Helpline</a></li>
+                    <li><a href="tel:1912">⚡ 1912 - Electricity DISCOM</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="gov-footer-bottom">
+            © 2026 Government of India. All Rights Reserved. Content Owned by Municipal Corporation & Smart City Mission.
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../auth/auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CivicConnect - Citizen Portal</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style_copy.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="bi bi-buildings-fill"></i>
+            Civic<span>Connect</span>
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMenu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#complaints">
+                        My Complaints
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#profile">
+                        Profile
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-3">
+                    <button
+                        class="btn btn-outline-danger btn-sm"
+                        onclick="logout()"
+                    >
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </button>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container py-4" id="dashboard">
+
+    <!-- HERO -->
+
+    <section class="hero-section rounded-4 p-4 p-md-5 mb-4">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-8">
+
+                <span class="hero-badge">
+                    Citizen Portal
+                </span>
+
+                <h1 class="display-6 fw-bold mt-3">
+                    Report. Track. Improve.
+                </h1>
+
+                <p class="lead mb-0">
+                    Report civic problems in your area and help
+                    make your city better.
+                </p>
+
+            </div>
+
+            <div class="col-md-4 text-md-end mt-4 mt-md-0">
+
+                <button
+                    class="btn btn-light btn-lg fw-semibold"
+                    onclick="openComplaintModal()"
+                >
+                    <i class="bi bi-plus-circle"></i>
+                    New Complaint
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <section class="row g-3 mb-4">
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+
+                <div>
+                    <p>Total Complaints</p>
+                    <h3 id="totalComplaints">0</h3>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+
+                <div class="stat-icon yellow">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+                <div>
+                    <p>Pending</p>
+                    <h3 id="pendingComplaints">0</h3>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+
+                <div>
+                    <p>In Progress</p>
+                    <h3 id="progressComplaints">0</h3>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+                    <p>Resolved</p>
+                    <h3 id="resolvedComplaints">0</h3>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <div class="row g-4">
+
+        <!-- COMPLAINTS -->
+
+        <div class="col-lg-8" id="complaints">
+
+            <div class="custom-card">
+
+                <div class="card-header-custom">
+
+                    <div>
+                        <h4>My Complaints</h4>
+                        <p>Track all your reported civic issues.</p>
+                    </div>
+
+                    <div class="search-box">
+
+                        <i class="bi bi-search"></i>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search..."
+                            oninput="searchComplaints()"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div id="complaintsContainer">
+
+                    <!-- Complaints generated by JavaScript -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <div class="col-lg-4">
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="custom-card mb-4">
+
+                <h5 class="fw-bold mb-3">
+                    Quick Actions
+                </h5>
+
+                <button
+                    class="quick-action"
+                    onclick="openComplaintModal()"
+                >
+                    <span>
+                        <i class="bi bi-pencil-square"></i>
+                        Report Civic Issue
+                    </span>
+
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+
+
+                <button
+                    class="quick-action"
+                    onclick="openEmergencyModal()"
+                >
+                    <span class="danger-text">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Emergency Report
+                    </span>
+
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+
+
+                <button
+                    class="quick-action"
+                    onclick="showNotification('Map integration will be connected with your GIS/Maps API.')"
+                >
+                    <span>
+                        <i class="bi bi-geo-alt"></i>
+                        Nearby Issues
+                    </span>
+
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+
+
+                <button
+                    class="quick-action"
+                    onclick="scrollToProfile()"
+                >
+                    <span>
+                        <i class="bi bi-person"></i>
+                        My Profile
+                    </span>
+
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+
+            </div>
+
+
+            <!-- EMERGENCY CARD -->
+
+            <div class="emergency-card">
+
+                <div class="emergency-icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    Emergency?
+                </h5>
+
+                <p>
+                    Report fire, accidents, gas leaks,
+                    floods or electrical hazards immediately.
+                </p>
+
+                <button
+                    class="btn btn-danger w-100"
+                    onclick="openEmergencyModal()"
+                >
+                    Report Emergency
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PROFILE ================= -->
+
+    <section id="profile" class="custom-card mt-4">
+
+        <div class="card-header-custom">
+
+            <div>
+                <h4>My Profile</h4>
+                <p>Manage your citizen account.</p>
+            </div>
+
+            <button
+                class="btn btn-outline-primary"
+                onclick="showNotification('Profile editing will be connected to the backend.')"
+            >
+                <i class="bi bi-pencil"></i>
+                Edit Profile
+            </button>
+
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <label class="profile-label">Name</label>
+                <div class="profile-value">
+                    Gaurav Yadav
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="profile-label">Email</label>
+                <div class="profile-value">
+                    gaurav@example.com
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="profile-label">Mobile</label>
+                <div class="profile-value">
+                    +91 XXXXX XXXXX
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     COMPLAINT MODAL
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="complaintModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content rounded-4 border-0">
+
+            <div class="modal-header">
+
+                <div>
+                    <h5 class="modal-title fw-bold">
+                        Report a Civic Issue
+                    </h5>
+
+                    <small class="text-secondary">
+                        Provide accurate information for faster resolution.
+                    </small>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="complaintForm">
+
+                    <div class="row g-3">
+
+                        <!-- TITLE -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Complaint Title *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="complaintTitle"
+                                class="form-control"
+                                placeholder="Example: Large pothole near school"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="col-md-6">
+
+                            <label class="form-label">
+                                Category *
+                            </label>
+
+                            <select
+                                id="complaintCategory"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                                <option>
+                                    Road / Pothole
+                                </option>
+
+                                <option>
+                                    Garbage
+                                </option>
+
+                                <option>
+                                    Water Leakage
+                                </option>
+
+                                <option>
+                                    Street Light
+                                </option>
+
+                                <option>
+                                    Drainage
+                                </option>
+
+                                <option>
+                                    Illegal Construction
+                                </option>
+
+                                <option>
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="col-12">
+
+                            <label class="form-label">
+                                Description *
+                            </label>
+
+                            <textarea
+                                id="complaintDescription"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Describe the problem..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- LOCATION -->
+
+                        <div class="col-md-7">
+
+                            <label class="form-label">
+                                Location *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="complaintLocation"
+                                class="form-control"
+                                placeholder="Enter location"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- PRIORITY -->
+
+                        <div class="col-md-5">
+
+                            <label class="form-label">
+                                Priority
+                            </label>
+
+                            <select
+                                id="complaintPriority"
+                                class="form-select"
+                            >
+
+                                <option>
+                                    Low
+                                </option>
+
+                                <option selected>
+                                    Medium
+                                </option>
+
+                                <option>
+                                    High
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- IMAGE -->
+
+                        <div class="col-12">
+
+                            <label class="form-label">
+                                Upload Image
+                            </label>
+
+                            <input
+                                type="file"
+                                id="complaintImage"
+                                class="form-control"
+                                accept="image/*"
+                                onchange="previewImage(event)"
+                            >
+
+                            <small class="text-secondary">
+                                Upload a clear photo of the civic issue.
+                            </small>
+
+                            <div id="imagePreviewContainer" class="mt-3"></div>
+
+                        </div>
+
+
+                        <!-- LOCATION BUTTON -->
+
+                        <div class="col-12">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                onclick="getLocation()"
+                            >
+                                <i class="bi bi-crosshair"></i>
+                                Detect My Location
+                            </button>
+
+                            <span
+                                id="locationStatus"
+                                class="small text-secondary ms-2"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AI BOX -->
+
+                    <div class="ai-info mt-4">
+
+                        <i class="bi bi-robot"></i>
+
+                        <div>
+
+                            <strong>
+                                AI Assistance
+                            </strong>
+
+                            <p>
+                                After backend integration, the uploaded
+                                image will be analyzed using Computer
+                                Vision to identify the issue and suggest
+                                the appropriate department.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="submitComplaint()"
+                >
+                    <i class="bi bi-send"></i>
+                    Submit Complaint
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     EMERGENCY MODAL
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="emergencyModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content rounded-4 border-0">
+
+            <div class="modal-header">
+
+                <div>
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Emergency Report
+                    </h5>
+
+                    <small class="text-secondary">
+                        Use only for urgent situations.
+                    </small>
+                </div>
+
+                <button
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <label class="form-label">
+                    Emergency Type
+                </label>
+
+                <select
+                    id="emergencyType"
+                    class="form-select mb-3"
+                >
+
+                    <option>
+                        Fire
+                    </option>
+
+                    <option>
+                        Road Accident
+                    </option>
+
+                    <option>
+                        Gas Leak
+                    </option>
+
+                    <option>
+                        Flood
+                    </option>
+
+                    <option>
+                        Electrical Hazard
+                    </option>
+
+                    <option>
+                        Building Collapse
+                    </option>
+
+                </select>
+
+
+                <label class="form-label">
+                    Description
+                </label>
+
+                <textarea
+                    id="emergencyDescription"
+                    class="form-control mb-3"
+                    rows="4"
+                    placeholder="Describe the emergency..."
+                ></textarea>
+
+
+                <label class="form-label">
+                    Emergency Location
+                </label>
+
+                <input
+                    type="text"
+                    id="emergencyLocation"
+                    class="form-control"
+                    placeholder="Enter location"
+                >
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-danger w-100"
+                    onclick="submitEmergency()"
+                >
+                    <i class="bi bi-broadcast"></i>
+                    Send Emergency Alert
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div
+    id="notification"
+    class="notification"
+></div>
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+<!-- Custom JS -->
+
+<script src="script_copy.js"></script>
+
+</body>
+</html>

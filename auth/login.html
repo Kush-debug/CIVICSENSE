@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Civic Grievance Portal — Sign In | Government of India</title>
+    <link rel="stylesheet" href="auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 1. National Tricolor Strip -->
+    <div class="gov-tricolor-strip"></div>
+
+    <!-- 2. Gov Utility & Accessibility Bar -->
+    <header class="gov-utility-bar">
+        <div class="gov-utility-inner">
+            <div class="gov-utility-left">
+                <span class="gov-national-text">
+                    🇮🇳 <span data-i18n="gov_title">Government of India</span>
+                </span>
+                <span class="gov-ministry-text" data-i18n="ministry_title">
+                    Ministry of Housing and Urban Affairs
+                </span>
+            </div>
+            <div class="gov-utility-right">
+                <span class="gov-clock" id="liveGovClock">19 Aug 2026 | 00:00:00 IST</span>
+                <div class="gov-accessibility-controls">
+                    <button type="button" class="gov-util-btn" id="fontDecreaseBtn" title="Decrease Font Size">A-</button>
+                    <button type="button" class="gov-util-btn" id="fontResetBtn" title="Default Font Size">A</button>
+                    <button type="button" class="gov-util-btn" id="fontIncreaseBtn" title="Increase Font Size">A+</button>
+                    <button type="button" class="gov-util-btn" id="contrastToggleBtn" title="Toggle High Contrast Mode">◐ Contrast</button>
+                </div>
+                <button type="button" class="gov-lang-btn" id="langToggleBtn">हिन्दी (Hindi)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. Official Main Header -->
+    <div class="gov-main-header">
+        <div class="gov-header-inner">
+            <div class="gov-brand-cluster">
+                <!-- State Emblem of India (Ashoka Lion Capital SVG) -->
+                <svg class="gov-emblem-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 C35 5 25 15 25 28 C25 40 32 48 40 52 L35 85 L65 85 L60 52 C68 48 75 40 75 28 C75 15 65 5 50 5 Z" fill="#0A2540"/>
+                    <circle cx="50" cy="28" r="8" fill="#FF9933"/>
+                    <path d="M20 90 L80 90 L75 100 L25 100 Z" fill="#0A2540"/>
+                    <circle cx="50" cy="95" r="4" fill="#138808"/>
+                    <text x="50" y="114" font-family="'Noto Sans Devanagari', sans-serif" font-size="9" font-weight="bold" fill="#0A2540" text-anchor="middle">सत्यमेव जयते</text>
+                </svg>
+                <div class="gov-brand-titles">
+                    <span class="gov-emblem-text-hi" data-i18n="portal_name">स्मार्ट नागरिक शिकायत निवारण प्रणाली</span>
+                    <h1 class="gov-portal-main-title">Civic<span>Connect</span> <small style="font-size: 0.9rem; font-weight: 600; color:#64748b;">(SCISM)</small></h1>
+                    <span class="gov-tagline-sub">National Urban Grievance Redressal & Smart Municipal Action Portal</span>
+                </div>
+            </div>
+
+            <div class="gov-header-initiatives">
+                <div class="gov-initiative-badge">
+                    <span>🏛️ Digital India</span>
+                </div>
+                <div class="gov-initiative-badge">
+                    <span>🧹 Swachh Bharat</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Helpline Ticker Banner -->
+    <div class="gov-helpline-ticker">
+        <span class="gov-helpline-icon">📞</span>
+        <span data-i18n="helpline_banner">
+            National Civic Helplines: 1913 (Nagar Nigam Toll-Free) | 112 (Emergency) | 1076 (CM Helpline) | 1912 (Power DISCOM)
+        </span>
+    </div>
+
+    <!-- 5. Main Auth Content -->
+    <main class="gov-auth-container">
+
+        <!-- Left Information / Grievance Redressal Charter -->
+        <section class="gov-info-panel">
+            <span class="gov-info-badge">Digital Governance Service</span>
+            <h2>Transparent. Accountable. <span>Citizen-Centric.</span></h2>
+            <p class="gov-info-desc">
+                Log civic grievances directly with Nagar Nigam, PWD, and Jal Sansthan. Track real-time progress via unique tracking tokens with SLA-backed accountability.
+            </p>
+
+            <div class="gov-service-pillars">
+                <div class="gov-pillar-item">
+                    <span class="gov-pillar-icon">📍</span>
+                    <div>
+                        <div class="gov-pillar-title">Ward-Level Geographic Routing</div>
+                        <div class="gov-pillar-desc">Auto-routing of complaints to designated Zonal Officers & Field Engineers.</div>
+                    </div>
+                </div>
+                <div class="gov-pillar-item">
+                    <span class="gov-pillar-icon">⚡</span>
+                    <div>
+                        <div class="gov-pillar-title">SLA Turnaround & Escalation</div>
+                        <div class="gov-pillar-desc">Strict time-bound resolution tracking with automated officer alerts.</div>
+                    </div>
+                </div>
+                <div class="gov-pillar-item">
+                    <span class="gov-pillar-icon">📄</span>
+                    <div>
+                        <div class="gov-pillar-title">Official Acknowledgment Slip</div>
+                        <div class="gov-pillar-desc">Printable PDF-ready grievance slip with QR verification for every lodge.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gov-statutory-notice">
+                <strong>Statutory Notice:</strong> This is a secure Government of India informatics portal. Unauthorized access, data tampering or submission of malicious reports is punishable under Section 66 of the Information Technology Act, 2000.
+            </div>
+        </section>
+
+        <!-- Right Single Sign-On Login Card -->
+        <section class="gov-login-card">
+            <div class="gov-login-header">
+                <h3 id="formTitle">Sign In to Portal</h3>
+                <p class="gov-login-subtitle" id="formSubtitle">Select your role to access your official civic dashboard</p>
+            </div>
+
+            <!-- Portal Switcher Tabs -->
+            <div class="gov-portal-tabs" role="tablist">
+                <button type="button" class="gov-portal-tab active" id="tabCitizen" data-portal="CITIZEN">
+                    <span>👤</span> <span data-i18n="citizen_portal">Citizen Portal</span>
+                </button>
+                <button type="button" class="gov-portal-tab" id="tabEmployee" data-portal="EMPLOYEE">
+                    <span>🛡️</span> <span data-i18n="officer_portal">Municipal Officer</span>
+                </button>
+            </div>
+
+            <!-- Alert Box -->
+            <div id="loginAlert" class="gov-alert gov-alert-error" style="display: none;"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="gov-form-group">
+                    <label for="email">
+                        <span id="labelEmail">Citizen Email / Mobile</span>
+                        <span style="color: #dc2626;">*</span>
+                    </label>
+                    <div class="gov-input-wrap">
+                        <input type="email" id="email" placeholder="citizen@demo.com" required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="gov-form-group">
+                    <label for="password">
+                        <span>Password / PIN</span>
+                        <span style="color: #dc2626;">*</span>
+                    </label>
+                    <div class="gov-input-wrap">
+                        <input type="password" id="password" placeholder="Enter secure password" required autocomplete="current-password">
+                        <button type="button" class="gov-pass-toggle" id="togglePass" aria-label="Toggle Password Visibility">👁️</button>
+                    </div>
+                </div>
+
+                <!-- Gov Security Captcha -->
+                <div class="gov-form-group">
+                    <label for="captchaInput">
+                        <span>Security Captcha</span>
+                        <span style="color: #dc2626;">*</span>
+                    </label>
+                    <div class="gov-captcha-box">
+                        <span class="gov-captcha-display" id="captchaCode">7K9M2</span>
+                        <button type="button" class="gov-captcha-reload" id="reloadCaptcha" title="Regenerate Captcha">🔄</button>
+                    </div>
+                    <div class="gov-input-wrap">
+                        <input type="text" id="captchaInput" placeholder="Enter characters shown above" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="gov-btn-primary" id="loginBtn">
+                    <span>Sign In to Citizen Portal</span> ➔
+                </button>
+            </form>
+
+            <!-- Citizen Register Action -->
+            <div class="gov-register-link" id="citizenRegisterPrompt">
+                New citizen user? <button type="button" id="openRegisterModal">Register for Citizen Account</button>
+            </div>
+
+            <!-- Officer Register Action -->
+            <div class="gov-register-link" id="officerRegisterPrompt" style="display: none;">
+                New Municipal Official or Field Engineer? <button type="button" id="openOfficerRegisterModal" style="color: var(--gov-saffron-600);">Register Officer Account (अधिकारी पंजीकरण)</button>
+            </div>
+
+            <!-- Quick Demo Credentials Box -->
+            <div class="gov-demo-card">
+                <div class="gov-demo-title">
+                    <span>Quick Demo Credentials</span>
+                    <span style="font-size: 0.65rem; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">Instant Test</span>
+                </div>
+                <div class="gov-demo-row">
+                    <span>User:</span>
+                    <code id="demoEmail">citizen@demo.com</code>
+                </div>
+                <div class="gov-demo-row">
+                    <span>Password:</span>
+                    <code id="demoPass">citizen123</code>
+                </div>
+                <button type="button" class="gov-demo-fill-btn" id="fillDemoBtn">
+                    Fill Demo Credentials
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 6. Citizen Registration Modal -->
+    <div id="registerModal" class="gov-modal">
+        <div class="gov-modal-dialog">
+            <div class="gov-modal-header">
+                <h3>🇮🇳 Citizen Registration (नागरिक पंजीकरण)</h3>
+                <button type="button" class="gov-modal-close" id="closeRegisterModal">&times;</button>
+            </div>
+            <div class="gov-modal-body">
+                <form id="registerForm">
+                    <div class="gov-form-group">
+                        <label for="regName">Full Legal Name (पूरा नाम) *</label>
+                        <div class="gov-input-wrap">
+                            <input type="text" id="regName" placeholder="e.g. Rameshwar Sharma" required>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="regEmail">Email Address (ईमेल पता) *</label>
+                        <div class="gov-input-wrap">
+                            <input type="email" id="regEmail" placeholder="e.g. rameshwar@gmail.com" required>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="regPhone">Mobile Number (मोबाइल नंबर) *</label>
+                        <div class="gov-input-wrap">
+                            <input type="tel" id="regPhone" placeholder="+91 94150 12345" required>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="regWard">Municipal Ward (नगर निगम वार्ड) *</label>
+                        <div class="gov-input-wrap">
+                            <select id="regWard" required>
+                                <option value="Ward 12 - Civil Lines">Ward 12 - Civil Lines</option>
+                                <option value="Ward 25 - Kakadeo">Ward 25 - Kakadeo</option>
+                                <option value="Ward 34 - Swaroop Nagar">Ward 34 - Swaroop Nagar</option>
+                                <option value="Ward 42 - Kalyanpur" selected>Ward 42 - Kalyanpur</option>
+                                <option value="Ward 08 - Hazratganj">Ward 08 - Hazratganj</option>
+                                <option value="Ward 15 - Gomti Nagar">Ward 15 - Gomti Nagar</option>
+                                <option value="Ward 20 - Aliganj">Ward 20 - Aliganj</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="regAadhaar">Aadhaar Last 4 Digits (आधार अंतिम 4 अंक - Optional)</label>
+                        <div class="gov-input-wrap">
+                            <input type="text" id="regAadhaar" maxlength="4" placeholder="e.g. 8842">
+                        </div>
+                    </div>
+
+                    <div class="gov-form-group">
+                        <label for="regPassword">Create Password (पासवर्ड बनाएं) *</label>
+                        <div class="gov-input-wrap">
+                            <input type="password" id="regPassword" placeholder="Minimum 6 characters" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="gov-btn-primary" id="submitRegisterBtn">
+                        Complete Citizen Registration ➔
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6b. Municipal Officer Registration Modal -->
+    <div id="officerRegisterModal" class="gov-modal">
+        <div class="gov-modal-dialog" style="max-width: 680px;">
+            <div class="gov-modal-header officer-header">
+                <h3>🛡️ Municipal Officer Registration (अधिकारी पंजीकरण)</h3>
+                <button type="button" class="gov-modal-close" id="closeOfficerRegisterModal">&times;</button>
+            </div>
+            <div class="gov-modal-body">
+                <div class="officer-form-notice">
+                    <span>🏛️</span>
+                    <div>
+                        <strong>Official Authority Clearance:</strong> Registering as a Government Nodal Officer or Field Engineer grants administrative redressal workbench access for your designated municipal department.
+                    </div>
+                </div>
+
+                <div id="officerRegAlert" class="gov-alert gov-alert-error" style="display: none;"></div>
+
+                <form id="officerRegisterForm">
+                    <div class="gov-form-grid-2">
+                        <div class="gov-form-group">
+                            <label for="offRegName">Officer Name & Title (पूरा नाम एवं पदनाम) *</label>
+                            <div class="gov-input-wrap">
+                                <input type="text" id="offRegName" placeholder="e.g. Er. Rajesh Verma" required>
+                            </div>
+                        </div>
+
+                        <div class="gov-form-group">
+                            <label for="offRegEmail">Official Government Email (ईमेल) *</label>
+                            <div class="gov-input-wrap">
+                                <input type="email" id="offRegEmail" placeholder="e.g. rajesh.pwd@knm.gov.in" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-grid-2">
+                        <div class="gov-form-group">
+                            <label for="offRegPhone">Official Mobile Number (मोबाइल) *</label>
+                            <div class="gov-input-wrap">
+                                <input type="tel" id="offRegPhone" placeholder="+91 98390 11223" required>
+                            </div>
+                        </div>
+
+                        <div class="gov-form-group">
+                            <label for="offRegDept">Municipal Department (विभाग) *</label>
+                            <div class="gov-input-wrap">
+                                <select id="offRegDept" required>
+                                    <option value="Public Works & Roads Department (PWD)">Public Works & Roads (PWD)</option>
+                                    <option value="Sanitation & Solid Waste Management (Nagar Nigam)">Sanitation & Waste Management (Nagar Nigam)</option>
+                                    <option value="Jal Sansthan & Water Supply Board">Jal Sansthan & Water Supply</option>
+                                    <option value="Street Lighting & Vidyut Vitran Nigam (DISCOM)">Street Lighting & DISCOM Power</option>
+                                    <option value="Drainage & Sewerage Board (Namami Gange Cell)">Drainage & Sewerage Board</option>
+                                    <option value="Public Health & Vector Control">Public Health & Vector Control</option>
+                                    <option value="General Municipal Administration & Encroachment">General Municipal Administration</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-grid-2">
+                        <div class="gov-form-group">
+                            <label for="offRegDesignation">Official Designation (पद) *</label>
+                            <div class="gov-input-wrap">
+                                <select id="offRegDesignation" required>
+                                    <option value="Executive Engineer (अधिशासी अभियंता)">Executive Engineer (अधिशासी अभियंता)</option>
+                                    <option value="Senior Zonal Officer (वरिष्ठ जोनल अधिकारी)">Senior Zonal Officer (वरिष्ठ जोनल अधिकारी)</option>
+                                    <option value="Assistant Engineer (सहायक अभियंता)">Assistant Engineer (सहायक अभियंता)</option>
+                                    <option value="Sanitary Inspector (सफाई निरीक्षक)">Sanitary Inspector (सफाई निरीक्षक)</option>
+                                    <option value="Municipal Health Officer (मुख्य स्वास्थ्य अधिकारी)">Municipal Health Officer (मुख्य स्वास्थ्य अधिकारी)</option>
+                                    <option value="Junior Engineer / Field Supervisor (अवर अभियंता)">Junior Engineer / Field Supervisor (अवर अभियंता)</option>
+                                    <option value="Ward Nodal Officer (वार्ड नोडल अधिकारी)">Ward Nodal Officer (वार्ड नोडल अधिकारी)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="gov-form-group">
+                            <label for="offRegWard">Assigned Zone / Jurisdiction (जोन / अधिकार क्षेत्र) *</label>
+                            <div class="gov-input-wrap">
+                                <select id="offRegWard" required>
+                                    <option value="Zone-1 (Wards 01-15)">Zone-1 (Wards 01-15)</option>
+                                    <option value="Zone-2 (Wards 16-30)">Zone-2 (Wards 16-30)</option>
+                                    <option value="Zone-3 (Wards 30-45)" selected>Zone-3 (Wards 30-45)</option>
+                                    <option value="Zone-4 (Wards 46-60)">Zone-4 (Wards 46-60)</option>
+                                    <option value="All Wards (Central Division)">All Wards (Central Division)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-grid-2">
+                        <div class="gov-form-group">
+                            <label for="offRegEmpCode">Employee Badge / Code (कर्मचारी कोड - Optional)</label>
+                            <div class="gov-input-wrap">
+                                <input type="text" id="offRegEmpCode" placeholder="e.g. EMP-2026-105">
+                            </div>
+                        </div>
+
+                        <div class="gov-form-group">
+                            <label for="offRegGovPin">Gov Security Clearance PIN (Optional)</label>
+                            <div class="gov-input-wrap">
+                                <input type="text" id="offRegGovPin" placeholder="Default: GOV2026">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-grid-2">
+                        <div class="gov-form-group">
+                            <label for="offRegPassword">Account Password (पासवर्ड) *</label>
+                            <div class="gov-input-wrap">
+                                <input type="password" id="offRegPassword" placeholder="Minimum 6 characters" required>
+                            </div>
+                        </div>
+
+                        <div class="gov-form-group">
+                            <label for="offRegConfirmPassword">Confirm Password (पासवर्ड पुष्टि) *</label>
+                            <div class="gov-input-wrap">
+                                <input type="password" id="offRegConfirmPassword" placeholder="Re-enter password" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="gov-btn-primary officer-btn" id="submitOfficerRegisterBtn" style="margin-top: 8px;">
+                        Complete Officer Registration & Access Control Room ➔
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Official National Footer -->
+    <footer class="gov-footer">
+        <div class="gov-footer-inner">
+            <div class="gov-footer-brand">
+                <h4>🏛️ Smart Civic Issue Management System (SCISM)</h4>
+                <p>
+                    Portal designed, developed, and maintained in compliance with the Guidelines for Indian Government Websites (GIGW). Ministry of Housing and Urban Affairs, Government of India.
+                </p>
+                <p style="font-size: 0.75rem; color: #64748b;">
+                    National Portal of India | Digital India Initiative | CPGRAMS Integrated
+                </p>
+            </div>
+            <div class="gov-footer-links">
+                <h5>Important Links</h5>
+                <ul>
+                    <li><a href="https://mohua.gov.in" target="_blank" rel="noopener">Ministry of Housing & Urban Affairs</a></li>
+                    <li><a href="https://digitalindia.gov.in" target="_blank" rel="noopener">Digital India Portal</a></li>
+                    <li><a href="https://swachhbharatmission.ddws.gov.in" target="_blank" rel="noopener">Swachh Bharat Mission</a></li>
+                    <li><a href="https://pgportal.gov.in" target="_blank" rel="noopener">CPGRAMS Central Grievance</a></li>
+                </ul>
+            </div>
+            <div class="gov-footer-links">
+                <h5>Emergency Helplines</h5>
+                <ul>
+                    <li><a href="tel:1913">📞 1913 - Nagar Nigam 24x7</a></li>
+                    <li><a href="tel:112">🚨 112 - National Emergency</a></li>
+                    <li><a href="tel:1076">🏛️ 1076 - CM Helpline</a></li>
+                    <li><a href="tel:1912">⚡ 1912 - Electricity DISCOM</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="gov-footer-bottom">
+            © 2026 Government of India. All Rights Reserved. Content Owned by Municipal Corporation & Smart City Mission.
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="auth.js"></script>
+    <script>
+        let currentPortal = "CITIZEN";
+
+        const tabCitizen = document.getElementById("tabCitizen");
+        const tabEmployee = document.getElementById("tabEmployee");
+        const loginForm = document.getElementById("loginForm");
+        const loginAlert = document.getElementById("loginAlert");
+        const loginBtn = document.getElementById("loginBtn");
+        const demoEmail = document.getElementById("demoEmail");
+        const demoPass = document.getElementById("demoPass");
+        const fillDemoBtn = document.getElementById("fillDemoBtn");
+        const togglePass = document.getElementById("togglePass");
+        const passwordInput = document.getElementById("password");
+        const emailInput = document.getElementById("email");
+        const captchaCode = document.getElementById("captchaCode");
+        const captchaInput = document.getElementById("captchaInput");
+        const reloadCaptcha = document.getElementById("reloadCaptcha");
+        
+        // Citizen Modal Elements
+        const registerModal = document.getElementById("registerModal");
+        const openRegisterModal = document.getElementById("openRegisterModal");
+        const closeRegisterModal = document.getElementById("closeRegisterModal");
+        const registerForm = document.getElementById("registerForm");
+        const citizenRegisterPrompt = document.getElementById("citizenRegisterPrompt");
+
+        // Officer Modal Elements
+        const officerRegisterModal = document.getElementById("officerRegisterModal");
+        const openOfficerRegisterModal = document.getElementById("openOfficerRegisterModal");
+        const closeOfficerRegisterModal = document.getElementById("closeOfficerRegisterModal");
+        const officerRegisterForm = document.getElementById("officerRegisterForm");
+        const officerRegisterPrompt = document.getElementById("officerRegisterPrompt");
+        const officerRegAlert = document.getElementById("officerRegAlert");
+
+        // Redirect if already authenticated
+        const activeSession = getSession();
+        if (activeSession) {
+            window.location.href = activeSession.role === "CITIZEN"
+                ? "../user_portal/index.html"
+                : "../employee_portal/index.html";
+        }
+
+        // Generate Random Captcha
+        function generateCaptcha() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let code = "";
+            for (let i = 0; i < 5; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            captchaCode.textContent = code;
+            captchaInput.value = "";
+        }
+        generateCaptcha();
+        reloadCaptcha.addEventListener("click", generateCaptcha);
+
+        // Switch Portals
+        function setPortal(portal) {
+            currentPortal = portal;
+            const isCitizen = portal === "CITIZEN";
+
+            tabCitizen.classList.toggle("active", isCitizen);
+            tabEmployee.classList.toggle("active", !isCitizen);
+            tabEmployee.classList.toggle("officer-tab", !isCitizen);
+
+            loginBtn.classList.toggle("officer-btn", !isCitizen);
+            loginBtn.innerHTML = isCitizen
+                ? '<span>Sign In to Citizen Portal</span> ➔'
+                : '<span>Sign In to Officer Portal</span> ➔';
+
+            document.getElementById("labelEmail").textContent = isCitizen
+                ? "Citizen Email / Registered Mobile"
+                : "Official Gov Officer Email";
+
+            if (citizenRegisterPrompt) citizenRegisterPrompt.style.display = isCitizen ? "block" : "none";
+            if (officerRegisterPrompt) officerRegisterPrompt.style.display = isCitizen ? "none" : "block";
+
+            const userKey = isCitizen ? "citizen" : "employee";
+            demoEmail.textContent = DEMO_USERS[userKey].email;
+            demoPass.textContent = DEMO_USERS[userKey].password;
+
+            loginAlert.style.display = "none";
+        }
+
+        tabCitizen.addEventListener("click", () => setPortal("CITIZEN"));
+        tabEmployee.addEventListener("click", () => setPortal("EMPLOYEE"));
+
+        // Fill Demo Credentials
+        fillDemoBtn.addEventListener("click", () => {
+            const userKey = currentPortal === "CITIZEN" ? "citizen" : "employee";
+            emailInput.value = DEMO_USERS[userKey].email;
+            passwordInput.value = DEMO_USERS[userKey].password;
+            captchaInput.value = captchaCode.textContent;
+        });
+
+        // Toggle Password Visibility
+        togglePass.addEventListener("click", () => {
+            const isPass = passwordInput.type === "password";
+            passwordInput.type = isPass ? "text" : "password";
+            togglePass.textContent = isPass ? "🙈" : "👁️";
+        });
+
+        // Handle Login Submission
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            loginAlert.style.display = "none";
+
+            // Validate Captcha
+            if (captchaInput.value.trim().toUpperCase() !== captchaCode.textContent.trim().toUpperCase()) {
+                loginAlert.textContent = "Security Captcha does not match. Please try again.";
+                loginAlert.style.display = "flex";
+                generateCaptcha();
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = "<span>Authenticating with Gov Portal...</span>";
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            const res = await apiLogin(email, password, currentPortal);
+
+            if (!res.success) {
+                loginAlert.textContent = res.message || "Invalid credentials.";
+                loginAlert.style.display = "flex";
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = currentPortal === "CITIZEN"
+                    ? '<span>Sign In to Citizen Portal</span> ➔'
+                    : '<span>Sign In to Officer Portal</span> ➔';
+                generateCaptcha();
+                return;
+            }
+
+            showToast("Official Login Verified!", "success");
+
+            setTimeout(() => {
+                window.location.href = currentPortal === "CITIZEN"
+                    ? "../user_portal/index.html"
+                    : "../employee_portal/index.html";
+            }, 500);
+        });
+
+        // Citizen Modal Controls
+        openRegisterModal.addEventListener("click", () => registerModal.style.display = "flex");
+        closeRegisterModal.addEventListener("click", () => registerModal.style.display = "none");
+
+        // Officer Modal Controls
+        openOfficerRegisterModal.addEventListener("click", () => {
+            officerRegAlert.style.display = "none";
+            officerRegisterModal.style.display = "flex";
+        });
+        closeOfficerRegisterModal.addEventListener("click", () => officerRegisterModal.style.display = "none");
+
+        window.addEventListener("click", (e) => {
+            if (e.target === registerModal) registerModal.style.display = "none";
+            if (e.target === officerRegisterModal) officerRegisterModal.style.display = "none";
+        });
+
+        // Citizen Register Submission
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById("submitRegisterBtn");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Registering...";
+
+            const payload = {
+                name: document.getElementById("regName").value,
+                email: document.getElementById("regEmail").value,
+                phone: document.getElementById("regPhone").value,
+                ward_no: document.getElementById("regWard").value,
+                aadhaar_last4: document.getElementById("regAadhaar").value,
+                password: document.getElementById("regPassword").value
+            };
+
+            const res = await apiRegister(payload);
+            if (!res.success) {
+                showToast(res.message || "Registration failed.", "error");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Complete Citizen Registration ➔";
+                return;
+            }
+
+            showToast("Registration successful! Redirecting to Citizen Portal...", "success");
+            setTimeout(() => {
+                window.location.href = "../user_portal/index.html";
+            }, 600);
+        });
+
+        // Municipal Officer Register Submission
+        officerRegisterForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            officerRegAlert.style.display = "none";
+
+            const pass = document.getElementById("offRegPassword").value;
+            const confirmPass = document.getElementById("offRegConfirmPassword").value;
+
+            if (pass !== confirmPass) {
+                officerRegAlert.textContent = "Passwords do not match. Please re-enter.";
+                officerRegAlert.style.display = "flex";
+                return;
+            }
+
+            if (pass.length < 6) {
+                officerRegAlert.textContent = "Password must be at least 6 characters.";
+                officerRegAlert.style.display = "flex";
+                return;
+            }
+
+            const submitBtn = document.getElementById("submitOfficerRegisterBtn");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Registering Municipal Officer...";
+
+            const payload = {
+                name: document.getElementById("offRegName").value.trim(),
+                email: document.getElementById("offRegEmail").value.trim(),
+                phone: document.getElementById("offRegPhone").value.trim(),
+                department: document.getElementById("offRegDept").value,
+                designation: document.getElementById("offRegDesignation").value,
+                ward_no: document.getElementById("offRegWard").value,
+                employee_code: document.getElementById("offRegEmpCode").value.trim() || null,
+                password: pass
+            };
+
+            const res = await apiRegisterOfficer(payload);
+
+            if (!res.success) {
+                officerRegAlert.textContent = res.message || "Officer registration failed.";
+                officerRegAlert.style.display = "flex";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Complete Officer Registration & Access Control Room ➔";
+                return;
+            }
+
+            showToast("Municipal Officer Registered! Welcome to Control Room.", "success");
+            setTimeout(() => {
+                window.location.href = "../employee_portal/index.html";
+            }, 600);
+        });
+    </script>
+</body>
+</html>

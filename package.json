@@ -1,0 +1,27 @@
+{
+  "name": "civicconnect-scism-gov-in",
+  "version": "2.0.0",
+  "description": "Smart Civic Issue Management System (SCISM) - Government of India Themed Portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node server/seed.js"
+  },
+  "keywords": [
+    "civic",
+    "governance",
+    "smart-city",
+    "swachh-bharat",
+    "digital-india",
+    "grievance-portal"
+  ],
+  "author": "National Informatics & Civic Administration",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
