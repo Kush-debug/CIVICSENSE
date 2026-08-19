@@ -392,20 +392,26 @@ function setSession(session) {
 
 function logout() {
     localStorage.removeItem(STORAGE_KEYS.session);
-    window.location.href = "../auth/login.html";
+    window.location.href = "/auth/login.html";   // ✅ absolute from site root
 }
 
 function requireAuth(expectedRole) {
     const session = getSession();
+
+    // ✅ Guard: never redirect if we're already on the login page
+    if (window.location.pathname.includes("/auth/login.html")) {
+        return session; // or null, but don't redirect again
+    }
+
     if (!session) {
-        window.location.href = "../auth/login.html";
+        window.location.href = "/auth/login.html";   // ✅ absolute
         return null;
     }
     if (expectedRole && session.role !== expectedRole) {
         if (session.role === "CITIZEN") {
-            window.location.href = "../user_portal/index.html";
+            window.location.href = "/user_portal/index.html";
         } else {
-            window.location.href = "../employee_portal/index.html";
+            window.location.href = "/employee_portal/index.html";
         }
         return null;
     }
